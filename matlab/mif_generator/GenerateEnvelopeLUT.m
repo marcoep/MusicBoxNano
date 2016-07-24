@@ -12,10 +12,8 @@ envaddr = [0:numel(EnvelopeLUTVector)-1];
 figure(1)
 plot(envaddr, EnvelopeLUTVector, '-x')
 grid on
-axis([0, envaddr(end), 0, 255])
+xlim([0, envaddr(end)])
 title('From elm-chan.org')
-fprintf('Address 0 to 255 is the Envelope LUT\n');
-
 
 % print address ranges
 fprintf('Address %d to %d is Envelope Table\n', envaddr(1), envaddr(end));
