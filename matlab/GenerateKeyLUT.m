@@ -1,7 +1,7 @@
 %% Generate a Key to Freq LUT mif file.
 
 %Set Reference Frequency
-Fref_c = 64000;
+Fref_c = 32000;
 
 
 %% Generate all values.
@@ -36,7 +36,7 @@ plot(lutin, lutout)
 
 %% Generate MIF file
 
-datafile = fopen('Key_AllMidiP1Octave_LUT.mif','w');
+datafile = fopen('KeyToFreqMidi.mif','w');
 
 fprintf(datafile, 'DEPTH = %d;\n',lutsize);
 fprintf(datafile, 'WIDTH = 23;\n');
@@ -54,9 +54,9 @@ fprintf(datafile, 'END;\n');
 fclose(datafile);
 
 %% Generate MATLAB simulation output
-
-KeyTable128 = @(x) lutout(x+1);
-save('KeyLUT.mat','KeyTable128');
+% 
+% KeyTable128 = @(x) lutout(x+1);
+% save('KeyLUT.mat','KeyTable128');
 
 %% Generate TestVectors
 

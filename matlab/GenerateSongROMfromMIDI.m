@@ -2,7 +2,9 @@ init;
 
 %% Settings
 
-midifilename_c = 'for_elise_by_beethoven.mid';
+midifilename_c = 'Canon in Bb.mid';
+tickwidth_c = 10;
+pitchwidth_c = 7;
 
 % specify midi file:
 mdi = readmidi(midifilename_c);
@@ -13,55 +15,41 @@ channels = unique(Notes(:,1),'rows');
 
 %specify which channels to use:
 %c = [2,3,4,5,6];
-c = 2;
-
-%specify microseconds per beat (quarter note):
-mspc = 857143;
+c = [1 2];
 
 
 %% calculations
 
-calcconst = 16000000/(mspc); %= 64tel per second
+% we have a 250 Hz clock driving the new-note ticks
+tickfreq = 250;
 
-Result = [[]];
-cnt = 1;
+% remove all notes which do not belong to the desired channels
+ourrows = ismember(Notes(:,1), c);
+ourNotes = Notes(ourrows, :);
 
-for i = 1:rows
-    if  ~isempty(find(c == Notes(i,1),1))
-        if (Notes(i,3) <= 127 && Notes(i,3) >= 0)
-            Result(cnt,:) = Notes(i,:);
-            cnt = cnt+1;
-        else
-            fprintf('Found key out of range at %d!\n',cnt);
-        end
-    end
-end
+% midi key (=pitch) is in 3rd column
+pitches = ourNotes(:,3);
 
-Result = Result(:,1:6);
+% figure out delta ticks between notes
+starttimes = ourNotes(:,5);
+deltatimes = [0; diff(starttimes)]; % [s]
+deltaticks = round(deltatimes*tickfreq);
+deltaticks(end) = 2^tickwidth_c-1; % set last note to max, to get a nice pause
 
-cust = [[]];
-fordebug = [[]];
+% convert to binary
+ticksbin = fi(deltaticks, 0, tickwidth_c, 0);
+pitchesbin = fi(pitches, 0, pitchwidth_c, 0);
 
-for i = 1:cnt-2
-    cust(i,:) = [Result(i,3), round((Result(i+1,5)-Result(i,5))*calcconst)];
-    %fordebug(i,:) = [KeyTable(Result(i,3)-9+1), round((Result(i+1,5)-Result(i,5))*10^6)];
-%     if fordebug(i,2) == 0
-%         fordebug(i,2) = 5;
-%     end
-end
-    cust(cnt-1,:) = [Result(cnt-1,3)-9, 32];
-    %fordebug(cnt-1,:) = [KeyTable(Result(cnt-1,3)-9 + 1), 10^6];
-    
-lutsize=cnt-1;
-
+% setup lut
+lutsize = numel(pitches);
 lutin = 0:lutsize-1;
     
 %% Generate MIF file
 
-datafile = fopen('fuer_elise.mif','w');
+datafile = fopen([midifilename_c '-musicbox.mif'],'w');
 
-fprintf(datafile, 'DEPTH = %d;\n',lutsize);
-fprintf(datafile, 'WIDTH = 14;\n');
+fprintf(datafile, 'DEPTH = %d;\n', lutsize);
+fprintf(datafile, 'WIDTH = %d;\n', tickwidth_c+pitchwidth_c);
 fprintf(datafile, 'ADDRESS_RADIX = HEX;\n');
 fprintf(datafile, 'DATA_RADIX = BIN;\n');
 fprintf(datafile, 'CONTENT\n');
@@ -69,7 +57,9 @@ fprintf(datafile, 'BEGIN\n');
 
 %output to file
 for i = 1:lutsize
-    fprintf(datafile, '%s : %s%s ;\n', dec2hex(lutin(i)), dec2bin(cust(i,2),7), dec2bin(cust(i,1),7));
+    t = ticksbin(i);
+    p = pitchesbin(i);
+    fprintf(datafile, '%s : %s%s ;\n', dec2hex(lutin(i)), t.bin, p.bin);
 end
 
 fprintf(datafile, 'END;\n');
@@ -77,9 +67,9 @@ fclose(datafile);
 
 %% Generate MATLAB simulation output
 
-SongTableKey1068 = @(x) cust(x+1,1);
-SongTableDuration1068 = @(x) cust(x+1,2);
-save('SongLUT.mat','SongTableKey1068','SongTableDuration1068');
+% SongTableKey1068 = @(x) cust(x+1,1);
+% SongTableDuration1068 = @(x) cust(x+1,2);
+% save('SongLUT.mat','SongTableKey1068','SongTableDuration1068');
 
 
 %% Generate Simulation VHDL
