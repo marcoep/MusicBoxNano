@@ -1,0 +1,3 @@
+[submodule "matlab/matlab-midi"]
+	path = matlab/matlab-midi
+	url = https://github.com/kts/matlab-midi.git
