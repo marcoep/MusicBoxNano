@@ -2,7 +2,7 @@ init;
 
 %% Settings
 
-midifilename_c = 'Canon in Bb.mid';
+midifilename_c = 'for_elise_by_beethoven.mid';
 tickwidth_c = 10;
 pitchwidth_c = 7;
 
@@ -15,7 +15,7 @@ channels = unique(Notes(:,1),'rows');
 
 %specify which channels to use:
 %c = [2,3,4,5,6];
-c = [1 2];
+c = [2];
 
 
 %% calculations
@@ -32,7 +32,7 @@ pitches = ourNotes(:,3);
 
 % figure out delta ticks between notes
 starttimes = ourNotes(:,5);
-deltatimes = [0; diff(starttimes)]; % [s]
+deltatimes = [diff(starttimes); 0]; % [s]
 deltaticks = round(deltatimes*tickfreq);
 deltaticks(end) = 2^tickwidth_c-1; % set last note to max, to get a nice pause
 
