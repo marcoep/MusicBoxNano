@@ -1,7 +1,8 @@
 %% Generate a Key to Freq LUT mif file.
 
 %Set Reference Frequency
-Fref_c = 32000;
+Fref_c = 128000;
+freq_counter_width_c = 29;
 
 
 %% Generate all values.
@@ -21,10 +22,11 @@ for i = 2:lutsize
     fvec(i) = fvec(1)*realpow(2,(i-1)/12);
 end
 
-lutout = round(2^25 * fvec/Fref_c); % 1/8th of the wavetable is the sustain vector.
-                                  % the wavetableaddress-counter is 29 bits
+lutout = round(2^(freq_counter_width_c-3) * fvec/Fref_c);
+                                  % 1/8th of the wavetable is the sustain vector.
+                                  % the wavetableaddress-counter is XX bits
                                   % wide and therefore if we want to play a
-                                  % frequency of Fref we need to add 2^25
+                                  % frequency of Fref we need to add 2^(xx-3)
                                   % each step to the phase counter.
 
 % double check what we have done
@@ -32,6 +34,8 @@ figure(1)
 plot(lutin,fvec./Fref_c)
 figure(2)
 plot(lutin, lutout)
+figure(3)
+plot(lutin, lutout/2^freq_counter_width_c)
 
 
 %% Generate MIF file
@@ -39,15 +43,16 @@ plot(lutin, lutout)
 datafile = fopen('KeyToFreqMidi.mif','w');
 
 fprintf(datafile, 'DEPTH = %d;\n',lutsize);
-fprintf(datafile, 'WIDTH = 23;\n');
+fprintf(datafile, 'WIDTH = %d;\n',freq_counter_width_c);
 fprintf(datafile, 'ADDRESS_RADIX = HEX;\n');
-fprintf(datafile, 'DATA_RADIX = HEX;\n');
+fprintf(datafile, 'DATA_RADIX = BIN;\n');
 fprintf(datafile, 'CONTENT\n');
 fprintf(datafile, 'BEGIN\n');
 
 %output to file
 for i = 1:lutsize
-    fprintf(datafile, '%s : %s ;\n', dec2hex(lutin(i)), dec2hex(lutout(i)));
+    t = fi(lutout(i), 0, freq_counter_width_c, 0);
+    fprintf(datafile, '%s : %s ;\n', dec2hex(lutin(i)), t.bin);
 end
 
 fprintf(datafile, 'END;\n');
