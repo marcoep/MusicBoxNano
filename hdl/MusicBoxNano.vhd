@@ -6,7 +6,7 @@
 -- Author     :   <Marco@JUDI-WIN10>
 -- Company    : 
 -- Created    : 2016-07-28
--- Last update: 2016-07-29
+-- Last update: 2016-07-30
 -- Platform   : Mentor Graphics ModelSim, Altera Quartus
 -- Standard   : VHDL'93/02
 -------------------------------------------------------------------------------
@@ -85,10 +85,16 @@ begin  -- architecture RTL
       NewKeyData_DO  => KeyData_D,
       NewKeyValid_SO => KeyValid_S);
 
+  -- output LEDs
+  Led_DO <= '0' & KeyData_D;
+
+
   -----------------------------------------------------------------------------
   -- Key to Frequency Mapping
   -----------------------------------------------------------------------------
-  KeyToFreqROM_i : entity work.KeyToFreqROM  -- latency 2
+
+  -- latency 2
+  KeyToFreqROM_i : entity work.KeyToFreqROM
     port map (
       address => KeyData_D,
       clock   => ClkSys_C,
@@ -108,7 +114,11 @@ begin  -- architecture RTL
   end process shim_valid;
 
 
-  -- continue here
+  -----------------------------------------------------------------------------
+  -- DDS and Envelope
+  -----------------------------------------------------------------------------
+
+  
 
 
 end architecture RTL;
