@@ -70,7 +70,7 @@ begin  -- architecture RTL
   -- instantiate song rom (latency 2)
   SongROM_i : entity work.SongROM
     port map (
-      address => std_logic_vector(AddrCounter_S),
+      address => AddrCounter_S,
       clock   => Clk_CI,
       q       => ROMout_D);
   CurKey_D      <= ROMout_D(6 downto 0);
@@ -107,7 +107,7 @@ begin  -- architecture RTL
           DurCounter_S <= DurCounter_S - 1;
         end if;
         if LoadNextDuration_S = '1' then
-          DurCounter_S <= unsigned(CurDuration_D);
+          DurCounter_S <= CurDuration_D;
         end if;
       end if;
     end if;

@@ -126,7 +126,7 @@ begin  -- architecture RTL
   end process DDSAddrGen;
 
   -- output
-  DDSAddr_DO <= std_logic_vector(DDSAddr_DP(DDS_COUNTER_WIDTH-1 downto DDS_COUNTER_WIDTH-12));
+  DDSAddr_DO <= DDSAddr_DP(DDS_COUNTER_WIDTH-1 downto DDS_COUNTER_WIDTH-12);
 
 
   -----------------------------------------------------------------------------

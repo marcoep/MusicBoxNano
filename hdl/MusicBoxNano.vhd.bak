@@ -69,7 +69,7 @@ begin  -- architecture RTL
   MusicBoxClocking_i : entity work.MusicBoxClocking
     port map (
       CLOCK_50       => CLOCK_50,
-      RESET_RI       => not(Button_DI(0)),
+      RESET_RI       => Button_DI(0),
       ClkSystem_CO   => ClkSys_C,
       ClkPWM_CO      => ClkPWM_C,
       ResetSystem_SO => ResetSys_S,
@@ -136,7 +136,7 @@ begin  -- architecture RTL
   -- PWM Generator
   -----------------------------------------------------------------------------
 
-  PWMGenerator_i : entity work.PWMGenerator
+  PWMGenerator_i : PWMGenerator
     port map (
       Clk_CI       => ClkPWM_C,
       Reset_SI     => ResetPWM_S,

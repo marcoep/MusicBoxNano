@@ -80,7 +80,7 @@ begin  -- architecture RTL
     port map (
       Clk_CI        => Clk5M_C,
       ClkStable_RI  => PLLLocked_S,
-      OtherReset_RI => RESET_RI,
+      OtherReset_RI => '0',
       SyncReset_SO  => ResetSystem_S);
 
   ResetSystem_SO <= ResetSystem_S;
@@ -90,7 +90,7 @@ begin  -- architecture RTL
     port map (
       Clk_CI        => Clk64M_C,
       ClkStable_RI  => PLLLocked_S,
-      OtherReset_RI => RESET_RI,
+      OtherReset_RI => '0',
       SyncReset_SO  => ResetPWM_S);
 
   ResetPWM_SO <= ResetPWM_S;
