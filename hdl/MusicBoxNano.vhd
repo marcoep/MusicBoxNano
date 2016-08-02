@@ -57,7 +57,7 @@ architecture RTL of MusicBoxNano is
   signal FreqIncrValid_S : std_logic                     := '0';
 
   -- dds to pwm
-  signal Waveform_D : std_logic_vector(7 downto 0) := (others => '0');
+  signal Waveform_D : std_logic_vector(9 downto 0) := (others => '0');
 
 
 begin  -- architecture RTL

@@ -3,6 +3,7 @@
 %Set Reference Frequency
 Fref_c = 128000;
 freq_counter_width_c = 29;
+transpose_c = 4;
 
 
 %% Generate all values.
@@ -15,7 +16,7 @@ lutin = 0:lutsize-1;
 
 % see http://subsynth.sourceforge.net/midinote2freq.html
 fvec = ones(1,lutsize);
-fvec(1) = 13.75*2^(-9/12); % 13.75 Hz is the base frequency, it matches A-1 and has the midi key 9, midi key 0 has C-1
+fvec(1) = transpose_c*13.75*2^(-9/12); % 13.75 Hz is the base frequency, it matches A-1 and has the midi key 9, midi key 0 has C-1
 
 % calculate frequencies in Hertz for every midi key
 for i = 2:lutsize

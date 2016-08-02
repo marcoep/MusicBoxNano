@@ -38,7 +38,7 @@ entity MusicBoxDDS is
     FreqTick_SI      : in  std_logic;
     FreqIncrement_D  : in  std_logic_vector(28 downto 0);
     FreqIncrValid_SI : in  std_logic;
-    Waveform_DO      : out std_logic_vector(7 downto 0));
+    Waveform_DO      : out std_logic_vector(9 downto 0));
 
 end entity MusicBoxDDS;
 
@@ -91,7 +91,7 @@ begin  -- architecture RTL
   wave_addr_gens : for i in 0 to 15 generate
     DDSAddressGenerator_i : entity work.DDSAddressGenerator
       generic map (
-        ENV_DECAY_SPEED   => 250,
+        ENV_DECAY_SPEED   => 8192,
         DDS_COUNTER_WIDTH => 29)
       port map (
         Clk_CI            => Clk_CI,
@@ -217,7 +217,7 @@ begin  -- architecture RTL
         WaveformUnsigned_D <= (others => '0');
       else
         if ColCntZero_S = '1' then
-          WaveformUnsigned_D <= WaveformSum_D + to_signed(2**19, 22);
+          WaveformUnsigned_D <= WaveformSum_D + to_signed(2**20, 22);
         end if;
       end if;
     end if;
@@ -230,7 +230,7 @@ begin  -- architecture RTL
       if Reset_SI = '1' then
         Waveform_DO <= (others => '0');
       else
-        Waveform_DO <= std_logic_vector(WaveformUnsigned_D(20 downto 13));
+        Waveform_DO <= std_logic_vector(WaveformUnsigned_D(20 downto 11));
       end if;
     end if;
   end process output_reg;

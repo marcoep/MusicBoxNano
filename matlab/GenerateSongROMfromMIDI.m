@@ -3,6 +3,7 @@ init;
 %% Settings
 
 midifilename_c = 'for_elise_by_beethoven.mid';
+% midifilename_c = 'beatles-let_it_be.mid';
 tickwidth_c = 10;
 pitchwidth_c = 7;
 
@@ -15,7 +16,7 @@ channels = unique(Notes(:,1),'rows');
 
 %specify which channels to use:
 %c = [2,3,4,5,6];
-c = [2];
+c = [2 3 4 5 6];
 
 
 %% calculations

@@ -29,7 +29,7 @@ entity PWMGenerator is
   port (
     Clk_CI       : in  std_logic;
     Reset_SI     : in  std_logic;
-    DutyCycle_DI : in  std_logic_vector(7 downto 0);
+    DutyCycle_DI : in  std_logic_vector(9 downto 0);
     PulseOut_DO  : out std_logic);
 
 end entity PWMGenerator;
@@ -37,8 +37,8 @@ end entity PWMGenerator;
 
 architecture RTL of PWMGenerator is
 
-  signal DutyCycle_D  : unsigned(7 downto 0) := (others => '0');
-  signal PWMCounter_D : unsigned(7 downto 0) := (others => '0');
+  signal DutyCycle_D  : unsigned(9 downto 0) := (others => '0');
+  signal PWMCounter_D : unsigned(9 downto 0) := (others => '0');
 
 begin
 

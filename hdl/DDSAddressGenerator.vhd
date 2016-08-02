@@ -31,7 +31,7 @@ use work.Helpers_Pkg.all;
 entity DDSAddressGenerator is
 
   generic (
-    ENV_DECAY_SPEED   : integer := 250;  -- 250 is one second (min 1, max 1023)
+    ENV_DECAY_SPEED   : integer := 500;  -- 500 is one second for the whole envelope (min 1, max 2^16-1)
     DDS_COUNTER_WIDTH : integer := 29);  -- min 12
 
   port (
@@ -52,8 +52,8 @@ architecture RTL of DDSAddressGenerator is
   constant SUSTAIN_BEGIN_ADDR : integer := (2**(DDS_COUNTER_WIDTH-3))*7;
 
   -- Envelope Address Generation
-  signal EnvTickCounter_DN : unsigned(9 downto 0) := (others => '0');
-  signal EnvTickCounter_DP : unsigned(9 downto 0) := (others => '0');
+  signal EnvTickCounter_DN : unsigned(15 downto 0) := (others => '0');
+  signal EnvTickCounter_DP : unsigned(15 downto 0) := (others => '0');
   signal EnvTick_S         : std_logic            := '0';
   signal EnvAddr_DN        : unsigned(7 downto 0) := (others => '0');
   signal EnvAddr_DP        : unsigned(7 downto 0) := (others => '0');
