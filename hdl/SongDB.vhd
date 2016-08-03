@@ -43,8 +43,8 @@ end entity SongDB;
 architecture RTL of SongDB is
 
   -- ROM constants (adapt to Quartus IP and generated .mif file)
-  constant SONG_ROM_ADDR_WIDTH : integer := 12;  -- adapt to song ROM address width
-  constant MAX_SONG_ADDR       : integer := 3243;  -- adapt to song ROM depth
+  constant SONG_ROM_ADDR_WIDTH : integer := 11;  -- adapt to song ROM address width
+  constant MAX_SONG_ADDR       : integer := 1067;  -- adapt to song ROM depth
 
   -- duration counter
   constant DURATION_COUNTER_WIDTH : integer                                     := 10;  -- fixed in MATLAB
